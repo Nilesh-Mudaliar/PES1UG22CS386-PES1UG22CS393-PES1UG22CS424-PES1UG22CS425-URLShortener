@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  redis:
+    image: redis:6.2-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - url-shortener-network
+
+  app:
+    build: ./app
+    ports:
+      - "5000:5000"
+    environment:
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - BASE_URL=http://localhost:5000
+    depends_on:
+      - redis
+    networks:
+      - url-shortener-network
+
+networks:
+  url-shortener-network:
